@@ -32,6 +32,7 @@ end
 class Application < ActiveRecord::Base
   before_create :generate_access_key, :sample_application
   after_create :run_application
+  after_save :generate_file
   
   def permalink; "/application/#{self.access_key}"; end
   
@@ -49,13 +50,18 @@ end
 RUBY
   end
   
-  def run_application
-    # sets up a port for the application
-    self.update_attribute :port, 4568
+  # Generates the file that will be used to run the application
+  def generate_file
     # creates the folder and file with application
     FileUtils.mkdir_p self.directory
     # create a app.rb file in the application folder
     File.open(File.join(self.directory, 'app.rb'), 'w') { |file| file.write self.code } 
+  end
+  
+  # Run the application 
+  def run_application
+    # sets up a port for the application
+    self.update_attribute :port, 4568
     # start the server
     system("ruby #{File.join(self.directory, 'app.rb')} -p #{self.port} &")
   end
@@ -99,10 +105,10 @@ helpers do
   # Generates a form to create a new application
   def application_form
     <<-HTML
-    <form method="POST" action="/applications">
-      <label for="name">Name</label><input type="text" id="name" name="name" value="">
-      <label for="email">Email</label><input type="text" id="email" name="email" value="">
-      <input type="submit" value="Save">
+    <form method="post" action="/applications">
+      <label for="name">Name</label><input type="text" id="name" name="name" value=""/>
+      <label for="email">Email</label><input type="text" id="email" name="email" value=""/>
+      <input type="submit" value="Save"/>
     </form>
     HTML
   end
@@ -137,7 +143,7 @@ __END__
       %h3 <a href="/">1 file apps</a>
     .main= yield
     .footer
-      &copy; <a href="http://ccjr.name/" alt="ccjr.name">Cloves Carneiro Jr</a>.
+      &copy; <a href="http://ccjr.name/" title="ccjr.name">Cloves Carneiro Jr</a>.
       Source code on <a href="http://github.com/ccjr/1fileapps" title="1fileapps by Cloves Carneiro Jr (ccjr)">github</a>
 
 @@ index
@@ -149,14 +155,14 @@ __END__
 %h5
   by
   %img{:src => gravatar_path(application.email)}
-%form{:action => application.permalink, :method => 'POST'}
+%form{:action => application.permalink, :method => 'post'}
   %input{:type => 'hidden', :name => '_method', :value => 'put'}
-  %label{:for => 'code'}
+  %label{:for => 'code'} Code
   %textarea{:name => 'code', :id => 'code', :rows => 15, :cols => 60}= application.code
   %input{:type => 'submit', :value => 'Save'}
-.preview
+.preview_area
   == #{application.path}/
-  %input{:type => 'text', :name => 'uri', :value => ''}
-  %input{:type => 'submit', :value => 'Go'}
+  %input{:type => 'text', :name => 'uri', :id => 'uri', :value => ''}
+  %input{:type => 'button', :value => 'Go', :onclick => "$('#preview')[0].src = '#{application.path}/' +  $('#uri')[0].value"}
   %br/
   %iframe{:src => application.path, :style => 'border: solid black 1px;', :id => 'preview'}
