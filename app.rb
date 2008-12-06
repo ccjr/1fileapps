@@ -2,6 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'active_record'
 require 'digest/md5'
+require 'haml'
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => "1fileapps.db")
 
@@ -11,6 +12,7 @@ begin
       t.string :name
       t.string :email
       t.string :access_key
+      t.text :code
       t.timestamps
     end
   end
@@ -18,56 +20,44 @@ rescue ActiveRecord::StatementInvalid
 end
 
 class Application < ActiveRecord::Base
-  before_create :generate_access_key
+  before_create :generate_access_key, :sample_application
+  def permalink; "/application/#{self.access_key}"; end
   def generate_access_key
     self.access_key = Digest::MD5.new.update("-#{Time.now.to_s}-#{self.email}-").to_s
   end
-  def permalink; "/application/#{self.access_key}"; end
+  def sample_application
+    self.code = <<-RUBY
+require 'rubygems'
+require 'sinatra'
+get '/' do
+  'Hello world!'
+end
+RUBY
+  end
 end
 
 get '/' do
-  res = "Hello world!"
-  res += application_form
-  erb res
+  haml :index
 end
 
 post '/applications' do
   application = Application.create(:name  => params[:name],
                                    :email => params[:email])
-  erb "Created #{application.name} application - #{application_link(application)}"
+  haml "Created #{application.name} application - #{application_link(application)}"
 end
 
 get '/application/:id' do
   application = Application.find_by_access_key(params[:id])
-  res = "Application - #{application.name} from "
-  res += "<img src=\"#{gravatar_path(application.email)}\"/>"
-  erb res
-end
-
-layout do
-  <<-HTML
-  <html>
-  <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <title>1fileapps - Sinatra apps</title>
-  </head>
-  <body>
-    <div id="header"><h3><a href="/">1 file apps</a></h3></div>
-    <div id="main">
-      <%= yield %>
-    </div>
-    <div id="footer">&copy; <a href="http://ccjr.name/" alt="ccjr.name">Cloves Carneiro Jr</a>. Source code on <a href="http://github.com/ccjr/1fileapps" title="1fileapps by Cloves Carneiro Jr (ccjr)">github</a></div>
-  </body>
-  </html>
-  HTML
+  put "** #{application.id}"
+  haml :show, :locals => { :application => application }
 end
 
 helpers do
   def application_form
     <<-HTML
     <form method="POST" action="/applications">
-      <label for="name">Name</label><input type="text" name="name" value="">
-      <label for="email">Email</label><input type="text" name="email" value="">
+      <label for="name">Name</label><input type="text" id="name" name="name" value="">
+      <label for="email">Email</label><input type="text" id="email" name="email" value="">
       <input type="submit" value="Save">
     </form>
     HTML
@@ -83,3 +73,32 @@ helpers do
     "http://www.gravatar.com/avatar/#{hash}?s=#{options[:size]}"
   end
 end
+
+use_in_file_templates!
+
+__END__
+
+@@ layout
+!!!
+%html{html_attrs}
+  %head
+    %meta{'http-equiv' => 'Content-Type', :content => 'text/html; charset=UTF-8'}
+    %title 1fileapps - Sinatra apps
+  %body
+    .header
+      %h3 <a href="/">1 file apps</a>
+    .main= yield
+    .footer
+      &copy; <a href="http://ccjr.name/" alt="ccjr.name">Cloves Carneiro Jr</a>.
+      Source code on <a href="http://github.com/ccjr/1fileapps" title="1fileapps by Cloves Carneiro Jr (ccjr)">github</a>
+
+@@ index
+%h4 Create your application now
+= application_form
+
+@@ show
+%h4= application.name
+%h5
+  by
+  %img{:src => gravatar_path(application.email)}
+%pre= application.code
