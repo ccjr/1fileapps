@@ -1,4 +1,4 @@
-= 1fileapps
+= 1 file apps
 
 == Overview
 
@@ -6,8 +6,6 @@ The goal of this application is to allow developers to create flat-file Sinatra 
 
 == TODO
 
-* Define a range for port number assignment
-* Dynamically assign port number
 * Write tests
 * Generate a Sinatra app with basic layout
 
