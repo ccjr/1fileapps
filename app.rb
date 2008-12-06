@@ -4,6 +4,15 @@ require 'active_record'
 require 'digest/md5'
 require 'haml'
 
+configure do
+  SERVER = "http://localhost"
+  APPS_DIRECTORY = File.join(ENV["HOME"], "code/1fileapps/apps")
+end
+
+configure :production do
+  SERVER = "http://1fileapps.com"
+end
+
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => "1fileapps.db")
 
 begin
@@ -13,6 +22,7 @@ begin
       t.string :email
       t.string :access_key
       t.text :code
+      t.integer :port, :default => 0
       t.timestamps
     end
   end
@@ -21,10 +31,14 @@ end
 
 class Application < ActiveRecord::Base
   before_create :generate_access_key, :sample_application
+  after_create :run_application
+  
   def permalink; "/application/#{self.access_key}"; end
+  
   def generate_access_key
     self.access_key = Digest::MD5.new.update("-#{Time.now.to_s}-#{self.email}-").to_s
   end
+  
   def sample_application
     self.code = <<-RUBY
 require 'rubygems'
@@ -33,6 +47,26 @@ get '/' do
   'Hello world!'
 end
 RUBY
+  end
+  
+  def run_application
+    # sets up a port for the application
+    self.update_attribute :port, 4568
+    # creates the folder and file with application
+    FileUtils.mkdir_p self.directory
+    # create a app.rb file in the application folder
+    File.open(File.join(self.directory, 'app.rb'), 'w') { |file| file.write self.code } 
+    # start the server
+    system("ruby #{File.join(self.directory, 'app.rb')} -p #{self.port} &")
+  end
+  
+  def path
+    "#{SERVER}:#{self.port}"
+  end
+  
+  # The directory from where the application will be executed
+  def directory
+    File.join(APPS_DIRECTORY, self.access_key)
   end
 end
 
@@ -97,6 +131,7 @@ __END__
   %head
     %meta{'http-equiv' => 'Content-Type', :content => 'text/html; charset=UTF-8'}
     %title 1fileapps - Sinatra apps
+    %script{:src => "http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js", :type => "text/javascript"}
   %body
     .header
       %h3 <a href="/">1 file apps</a>
@@ -119,3 +154,9 @@ __END__
   %label{:for => 'code'}
   %textarea{:name => 'code', :id => 'code', :rows => 15, :cols => 60}= application.code
   %input{:type => 'submit', :value => 'Save'}
+.preview
+  == #{application.path}/
+  %input{:type => 'text', :name => 'uri', :value => ''}
+  %input{:type => 'submit', :value => 'Go'}
+  %br/
+  %iframe{:src => application.path, :style => 'border: solid black 1px;', :id => 'preview'}
