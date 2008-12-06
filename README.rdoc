@@ -2,15 +2,18 @@
 
 == Overview
 
-The goal of this application is to allow developers to create their a Sinatra application online.
+The goal of this application is to allow developers to create flat-file Sinatra applications online.
 
 == TODO
 
-* allow users to create an application
+* Define a range for port number assignment
+* Dynamically assign port number
+* Write tests
+* Generate a Sinatra app with basic layout
 
 == Meta
 
-Written by Cloves Carneiro Jr
+Written by Cloves Carneiro Jr: http://ccjr.name
 
 Released under the MIT License: http://www.opensource.org/licenses/mit-license.php
 
