@@ -36,21 +36,25 @@ RUBY
   end
 end
 
+# Home page, obviously
 get '/' do
   haml :index
 end
 
+# Creates a new application
 post '/applications' do
   application = Application.create(:name  => params[:name],
                                    :email => params[:email])
   haml "Created #{application.name} application - #{application_link(application)}"
 end
 
+# Shows the application page with code and preview
 get '/application/:id' do
   application = Application.find_by_access_key(params[:id])
   haml :show, :locals => { :application => application }
 end
 
+# Updates the application code
 put '/application/:id' do
   application = Application.find_by_access_key(params[:id])
   application.update_attribute :code, params[:code]
@@ -58,6 +62,7 @@ put '/application/:id' do
 end
 
 helpers do
+  # Generates a form to create a new application
   def application_form
     <<-HTML
     <form method="POST" action="/applications">
@@ -68,10 +73,12 @@ helpers do
     HTML
   end
   
+  # Link to an aplication
   def application_link(application)
     "<a href=\"#{application.permalink}\">#{application.name}</a>"
   end
   
+  # Uses gravatar for a specific email address
   def gravatar_path(email, options={})
     options[:size] ||= 50
     hash = Digest::MD5.new.update(email)
