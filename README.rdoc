@@ -5,4 +5,13 @@
 The goal of this application is to allow developers to create their a Sinatra application online.
 
 == TODO
+
 * allow users to create an application
+
+== Meta
+
+Written by Cloves Carneiro Jr
+
+Released under the MIT License: http://www.opensource.org/licenses/mit-license.php
+
+http://github.com/ccjr/1fileapps
