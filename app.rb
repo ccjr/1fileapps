@@ -48,8 +48,13 @@ end
 
 get '/application/:id' do
   application = Application.find_by_access_key(params[:id])
-  put "** #{application.id}"
   haml :show, :locals => { :application => application }
+end
+
+put '/application/:id' do
+  application = Application.find_by_access_key(params[:id])
+  application.update_attribute :code, params[:code]
+  redirect application.permalink
 end
 
 helpers do
@@ -101,4 +106,8 @@ __END__
 %h5
   by
   %img{:src => gravatar_path(application.email)}
-%pre= application.code
+%form{:action => application.permalink, :method => 'POST'}
+  %input{:type => 'hidden', :name => '_method', :value => 'put'}
+  %label{:for => 'code'}
+  %textarea{:name => 'code', :id => 'code', :rows => 15, :cols => 60}= application.code
+  %input{:type => 'submit', :value => 'Save'}
