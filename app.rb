@@ -80,9 +80,10 @@ helpers do
   
   # Uses gravatar for a specific email address
   def gravatar_path(email, options={})
-    options[:size] ||= 50
+    options[:size] ||= 30
+    options[:default] ||= "http://github.com/images/gravatars/gravatar-30.png"
     hash = Digest::MD5.new.update(email)
-    "http://www.gravatar.com/avatar/#{hash}?s=#{options[:size]}"
+    "http://www.gravatar.com/avatar/#{hash}?s=#{options[:size]}&d=#{options[:default]}"
   end
 end
 
