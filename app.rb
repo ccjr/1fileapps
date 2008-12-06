@@ -1,8 +1,6 @@
 require 'rubygems'
 require 'sinatra'
 require 'active_record'
-
-require 'digest/sha1'
 require 'digest/md5'
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => "1fileapps.db")
