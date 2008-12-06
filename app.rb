@@ -57,14 +57,16 @@ RUBY
     FileUtils.mkdir_p self.directory
     # create a app.rb file in the application folder
     File.open(File.join(self.directory, 'app.rb'), 'w') { |file| file.write self.code } 
-  end
+  end 
   
   # Run the application 
   def run_application
-    # sets up a port for the application
-    self.update_attribute :port, Application.assign_port_mumber
-    # start the server
-    system("ruby #{File.join(self.directory, 'app.rb')} -p #{self.port} &")
+    if self.port == 0
+      # sets up a port for the application
+      self.update_attribute :port, Application.assign_port_mumber
+      # start the server
+      system("ruby #{File.join(self.directory, 'app.rb')} -p #{self.port} &")
+    end
   end
   
   def path
