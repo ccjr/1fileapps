@@ -6,6 +6,7 @@ require 'haml'
 
 configure do
   SERVER = "http://localhost"
+  STARTING_PORT = 5000
   APPS_DIRECTORY = File.join(ENV["HOME"], "code/1fileapps/apps")
 end
 
@@ -61,7 +62,7 @@ RUBY
   # Run the application 
   def run_application
     # sets up a port for the application
-    self.update_attribute :port, 4568
+    self.update_attribute :port, Application.assign_port_mumber
     # start the server
     system("ruby #{File.join(self.directory, 'app.rb')} -p #{self.port} &")
   end
@@ -73,6 +74,12 @@ RUBY
   # The directory from where the application will be executed
   def directory
     File.join(APPS_DIRECTORY, self.access_key)
+  end
+  
+  # Assigns a port number for a new application
+  def self.assign_port_mumber
+    next_port = Application.maximum(:port) + 1
+    (next_port > STARTING_PORT) ? next_port : STARTING_PORT
   end
 end
 
