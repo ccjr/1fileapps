@@ -147,11 +147,40 @@ __END__
     %meta{'http-equiv' => 'Content-Type', :content => 'text/html; charset=UTF-8'}
     %title 1fileapps - Sinatra apps
     %script{:src => "http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js", :type => "text/javascript"}
+    %style{:type => "text/css", :media => "screen"}
+      :sass
+        *
+          :margin 0
+          :padding 0
+        body
+          :font-size 12px
+          :letter-spacing 0.05em
+          :line-height 1.3
+          :background #FFF
+        #header
+          :padding 10px 0
+          :width 926px
+          :margin 0 auto
+          :border-bottom 1px solid #ccc
+          :text-align center
+        #main
+          :width 900px
+          :min-height 500px
+          :margin 0 auto
+          :margin-top 10px
+          :overflow hidden
+        #footer
+          :width 926px
+          :margin 0 auto
+          :padding 10px 0px
+          :letter-spacing 0.1em
+          :border-top 1px solid #ccc
+          :text-align center
   %body
-    .header
+    #header
       %h3 <a href="/">1 file apps</a>
-    .main= yield
-    .footer
+    #main= yield
+    #footer
       &copy; <a href="http://ccjr.name/" title="ccjr.name">Cloves Carneiro Jr</a>.
       Source code on <a href="http://github.com/ccjr/1fileapps" title="1fileapps by Cloves Carneiro Jr (ccjr)">github</a>
 
