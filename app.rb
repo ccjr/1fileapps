@@ -118,16 +118,6 @@ post '/application/:id' do
 end
 
 helpers do
-  # Generates a form to create a new application
-  def application_form
-    <<-HTML
-    <form method="post" action="/applications">
-      <label for="name">Application name</label><input type="text" id="name" name="name" class="text" value=""/>
-      <input type="submit" value="Save"/>
-    </form>
-    HTML
-  end
-  
   # Link to an aplication
   def application_link(application)
     "<a href=\"#{application.permalink}\">#{application.name}</a>"
@@ -232,7 +222,10 @@ __END__
 - else
   %h2 Create your application now
   = session[:email]
-  = application_form
+  %form{:method => "post", :action => "/applications"}
+    %label{:for => "name"} Application name
+    %input{:type => "text", :id => "name", :name => "name", :class => "text", :value => ""}
+    %input{:type => "submit", :value => "Save"}
 
   %h3 Your apps
   %ul
