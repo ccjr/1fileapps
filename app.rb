@@ -172,8 +172,7 @@ __END__
           :display block
           :font-size 11px
           :width 150px
-          :color #666
-      
+          :color #666      
         h2, h3
           :border-bottom 1px solid #ccc
           :padding 6px
@@ -188,17 +187,13 @@ __END__
           :margin 0 auto
           :margin-top 10px
           :overflow hidden
-          
           li
             :font-size 14px
             :padding-left 10px
-            
-          
           .left
             :padding-left 24px
             :width 47%
             :float left
-
           .right
             :padding-left 20px
             :padding-right 20px
@@ -207,7 +202,6 @@ __END__
             :float right
             iframe
               :margin 10px
-          
         #footer
           :width 926px
           :margin 0 auto
