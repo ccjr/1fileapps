@@ -87,7 +87,8 @@ end
 
 # Home page, obviously
 get '/' do
-  haml :index
+  applications = Application.all :conditions => {:email => params[:email]}
+  haml :index, :locals => {:applications => applications}
 end
 
 # Creates a new application
@@ -187,6 +188,10 @@ __END__
 @@ index
 %h4 Create your application now
 = application_form
+%h5 Your apps
+%ul
+  - for application in applications
+    %li= application_link(application)
 
 @@ show
 %h4= application.name
