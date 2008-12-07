@@ -190,6 +190,8 @@ __END__
             :border-left 1px solid #ccc            
             :width 45%
             :float right
+            iframe
+              :margin 10px
           
         #footer
           :width 926px
