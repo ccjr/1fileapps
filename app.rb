@@ -163,12 +163,33 @@ __END__
           :margin 0 auto
           :border-bottom 1px solid #ccc
           :text-align center
+        h2
+          :border-bottom 1px solid #ccc
+          :padding 6px
+          :margin-bottom 13px
+        .info
+          :float right
+          img
+            :vertical-align middle
         #main
           :width 900px
           :min-height 500px
           :margin 0 auto
           :margin-top 10px
           :overflow hidden
+          
+          .left
+            :padding-left 24px
+            :width 47%
+            :float left
+
+          .right
+            :padding-left 20px
+            :padding-right 20px
+            :border-left 1px solid #ccc            
+            :width 45%
+            :float right
+          
         #footer
           :width 926px
           :margin 0 auto
@@ -178,29 +199,32 @@ __END__
           :text-align center
   %body
     #header
-      %h3 <a href="/">1 file apps</a>
+      %h1 <a href="/">1 file apps</a>
     #main= yield
     #footer
       &copy; <a href="http://ccjr.name/" title="ccjr.name">Cloves Carneiro Jr</a>.
       Source code on <a href="http://github.com/ccjr/1fileapps" title="1fileapps by Cloves Carneiro Jr (ccjr)">github</a>
 
 @@ index
-%h4 Create your application now
+%h2 Create your application now
 = application_form
 
 @@ show
-%h4= application.name
-%h5
+.info
   by
   %img{:src => gravatar_path(application.email)}
-%form{:action => application.permalink, :method => 'post'}
-  %input{:type => 'hidden', :name => '_method', :value => 'put'}
-  %label{:for => 'code'} Code
-  %textarea{:name => 'code', :id => 'code', :rows => 15, :cols => 60}= application.code
-  %input{:type => 'submit', :value => 'Save'}
-.preview_area
-  == #{application.path}/
-  %input{:type => 'text', :name => 'uri', :id => 'uri', :value => ''}
-  %input{:type => 'button', :value => 'Go', :onclick => "$('#preview')[0].src = '#{application.path}/' +  $('#uri')[0].value"}
-  %br/
-  %iframe{:src => application.path, :style => 'border: solid black 1px;', :id => 'preview'}
+%h2
+  = application.name
+.left
+  %form{:action => application.permalink, :method => 'post'}
+    %input{:type => 'hidden', :name => '_method', :value => 'put'}
+    %label{:for => 'code'} Code
+    %textarea{:name => 'code', :id => 'code', :rows => 15, :cols => 50}= application.code
+    %input{:type => 'submit', :value => 'Save'}
+.right
+  .preview_area
+    == #{application.path}/
+    %input{:type => 'text', :name => 'uri', :id => 'uri', :value => ''}
+    %input{:type => 'button', :value => 'Go', :onclick => "$('#preview')[0].src = '#{application.path}/' +  $('#uri')[0].value"}
+    %br/
+    %iframe{:src => application.path, :style => 'border: solid black 1px;', :id => 'preview'}
