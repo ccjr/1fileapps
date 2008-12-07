@@ -2,7 +2,7 @@
 
 == Overview
 
-The goal of this application is to allow developers to create flat-file Sinatra applications online in no more than 200 lines of code.
+The goal of this application is to allow developers to create flat-file Sinatra applications online. My personal goal is to play with Sinatra and write something useful in no more than 200 lines of code.
 
 == TODO
 
