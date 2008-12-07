@@ -5,6 +5,7 @@ require 'digest/md5'
 require 'haml'
 
 configure do
+  enable :sessions
   SERVER = "http://localhost"
   STARTING_PORT = 5000
   APPS_DIRECTORY = File.join(ENV["HOME"], "code/1fileapps/apps")
@@ -87,15 +88,21 @@ end
 
 # Home page, obviously
 get '/' do
-  applications = Application.all :conditions => {:email => params[:email]}
+  applications = Application.all :conditions => {:email => session[:email]}
   haml :index, :locals => {:applications => applications}
+end
+
+# Creates a new application
+post '/login' do
+  session[:email] = params[:email]
+  redirect '/'
 end
 
 # Creates a new application
 post '/applications' do
   application = Application.create(:name  => params[:name],
-                                   :email => params[:email])
-  haml "Created #{application.name} application - #{application_link(application)}"
+                                   :email => session[:email])
+  redirect '/'
 end
 
 # Shows the application page with code and preview
@@ -116,8 +123,6 @@ helpers do
     <<-HTML
     <form method="post" action="/applications">
       <label for="name">Application name</label><input type="text" id="name" name="name" class="text" value=""/>
-      <label for="email">Email</label><input type="text" id="email" name="email" class="text"  value=""/>
-      <br/>
       <input type="submit" value="Save"/>
     </form>
     HTML
@@ -224,12 +229,21 @@ __END__
       Source code on <a href="http://github.com/ccjr/1fileapps" title="1fileapps by Cloves Carneiro Jr (ccjr)">github</a>
 
 @@ index
-%h2 Create your application now
-= application_form
-%h3 Your apps
-%ul
-  - for application in applications
-    %li= application_link(application)
+- if session[:email].nil?
+  %h2 Login
+  %form{:method => "post", :action => "/login"}
+    %label{:for => "email"} Email
+    %input{:type => "text", :id => "email", :name => "email", :class => "text", :value => ""}
+    %input{:type => "submit", :value => "Login"}
+- else
+  %h2 Create your application now
+  = session[:email]
+  = application_form
+
+  %h3 Your apps
+  %ul
+    - for application in applications
+      %li= application_link(application)
 
 @@ show
 .info
