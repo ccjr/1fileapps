@@ -105,10 +105,9 @@ get '/application/:id' do
 end
 
 # Updates the application code
-put '/application/:id' do
+post '/application/:id' do
   application = Application.find_by_access_key(params[:id])
   application.update_attribute :code, params[:code]
-  redirect application.permalink
 end
 
 helpers do
@@ -221,11 +220,10 @@ __END__
 %h2
   = application.name
 .left
-  %form{:action => application.permalink, :method => 'post'}
-    %input{:type => 'hidden', :name => '_method', :value => 'put'}
+  %form{:action => application.permalink}
     %label{:for => 'code'} Code
     %textarea{:name => 'code', :id => 'code', :rows => 15, :cols => 50}= application.code
-    %input{:type => 'submit', :value => 'Save'}
+    %input{:type => 'button', :value => 'Save', :onclick => "$.post('#{application.permalink}', {code: $('#code').val()})"}
 .right
   .preview_area
     == #{application.path}/
