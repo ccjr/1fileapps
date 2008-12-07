@@ -164,15 +164,19 @@ __END__
           :line-height 1.3
           :background #FFF
         #header
-          :padding 10px 0
           :width 926px
+          :padding 10px 0
           :margin 0 auto
           :border-bottom 1px solid #ccc
           :text-align center
         form
           :padding 10px
-        input.text, textarea, select
+        input.text, select
           :width 200px
+        textarea
+          :margin-top 7px
+          :height 500px
+          :width 100%
         label
           :display block
           :font-size 11px
@@ -188,7 +192,6 @@ __END__
             :vertical-align middle
         #main
           :width 900px
-          :min-height 500px
           :margin 0 auto
           :margin-top 10px
           :overflow hidden
@@ -207,6 +210,8 @@ __END__
             :float right
             iframe
               :margin 10px
+              :width 100%
+              :height 500px
         #footer
           :width 926px
           :margin 0 auto
@@ -214,7 +219,12 @@ __END__
           :letter-spacing 0.1em
           :border-top 1px solid #ccc
           :text-align center
-  %body
+        #show
+          #header, #main, #footer
+            :width 98%
+            :margin-right 10px
+            :margin-left 10px
+  %body{:id => @body_id}
     #header
       %h1 <a href="/">1 file apps</a>
     #main= yield
@@ -223,6 +233,7 @@ __END__
       Source code on <a href="http://github.com/ccjr/1fileapps" title="1fileapps by Cloves Carneiro Jr (ccjr)">github</a>
 
 @@ index
+- @body_id = "index"
 - if session[:email].nil?
   %h2 Login
   %form{:method => "post", :action => "/login"}
@@ -240,6 +251,7 @@ __END__
       %li= application_link(application)
 
 @@ show
+- @body_id = "show"
 .info
   by
   %img{:src => gravatar_path(application.email)}
