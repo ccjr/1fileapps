@@ -116,8 +116,9 @@ helpers do
   def application_form
     <<-HTML
     <form method="post" action="/applications">
-      <label for="name">Name</label><input type="text" id="name" name="name" value=""/>
-      <label for="email">Email</label><input type="text" id="email" name="email" value=""/>
+      <label for="name">Application name</label><input type="text" id="name" name="name" class="text" value=""/>
+      <label for="email">Email</label><input type="text" id="email" name="email" class="text"  value=""/>
+      <br/>
       <input type="submit" value="Save"/>
     </form>
     HTML
@@ -164,7 +165,17 @@ __END__
           :margin 0 auto
           :border-bottom 1px solid #ccc
           :text-align center
-        h2
+        form
+          :padding 10px
+        input.text, textarea, select
+          :width 200px
+        label
+          :display block
+          :font-size 11px
+          :width 150px
+          :color #666
+      
+        h2, h3
           :border-bottom 1px solid #ccc
           :padding 6px
           :margin-bottom 13px
@@ -178,6 +189,11 @@ __END__
           :margin 0 auto
           :margin-top 10px
           :overflow hidden
+          
+          li
+            :font-size 14px
+            :padding-left 10px
+            
           
           .left
             :padding-left 24px
@@ -211,7 +227,7 @@ __END__
 @@ index
 %h2 Create your application now
 = application_form
-%h5 Your apps
+%h3 Your apps
 %ul
   - for application in applications
     %li= application_link(application)
@@ -231,7 +247,7 @@ __END__
 .right
   .preview_area
     == #{application.path}/
-    %input{:type => 'text', :name => 'uri', :id => 'uri', :value => ''}
+    %input{:type => 'text', :name => 'uri', :id => 'uri', :class => 'text', :value => ''}
     %input{:type => 'button', :value => 'Go', :onclick => "$('#preview')[0].src = '#{application.path}/' +  $('#uri')[0].value"}
     %br/
     %iframe{:src => application.path, :style => 'border: solid black 1px;', :id => 'preview'}
