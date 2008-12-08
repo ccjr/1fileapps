@@ -244,6 +244,17 @@ __END__
     - for application in applications
       %li= application_link(application)
 
+.sidebar
+  %h3 What is this?
+  1 file apps is a microapp that helps developers try out the <a href="http://sinatra.rubyforge.org/">Sinatra</a> Ruby web framework. It provides a place for developers to start their first Sinatra application in a few seconds.
+  %h3 Resources
+  There are a few resources to help you learn coding your application with Sinatra. I recommend you read both the Sinatra web site, and some other people's code on <a href="github.com">github</a>.
+  %ul
+    %li <a href="http://sinatra.rubyforge.org/">Sinatra</a> web site has some pretty good documentation
+    %li <a href="http://github.com/kastner/sin/tree/master/sinatra-blog.rb">Sin</a>, by Erik Kastner
+    %li <a href="http://devver.net/blog/2008/11/building-a-iphone-web-app-in-under-50-lines-with-sinatra-and-iui/">Building a iPhone web app in under 50 lines with Sinatra and iUI</a>
+    %li <a href="http://github.com/adamwiggins/scanty/tree/master">Scanty</a>, by <a href="http://adam.blog.heroku.com/">Adam Wiggins</a>
+
 @@ show
 - @body_id = "show"
 .info
