@@ -221,6 +221,7 @@ __END__
     #footer
       &copy; <a href="http://ccjr.name/" title="ccjr.name">Cloves Carneiro Jr</a>.
       Source code on <a href="http://github.com/ccjr/1fileapps" title="1fileapps by Cloves Carneiro Jr (ccjr)">github</a>
+    %script{:src => "http://1fileapps.uservoice.com/pages/general/widgets/tab.js?alignment=right&amp;color=00BCBA", :type=> "text/javascript"}
 
 @@ index
 - @body_id = "index"
