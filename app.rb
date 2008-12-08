@@ -202,9 +202,22 @@ __END__
               :margin 10px
               :width 100%
               :height 500px
+        #mainbar
+          :padding-right 10px
+          :width 65%
+          :float left
+        #sidebar
+          :padding-left 10px
+          :width 30%
+          :float right
+          ul, li
+            :margin inherit
+            :padding inherit
         #footer
+          :clear both
           :width 926px
           :margin 0 auto
+          :margin-top 20px
           :padding 10px 0px
           :letter-spacing 0.1em
           :border-top 1px solid #ccc
@@ -225,30 +238,33 @@ __END__
 
 @@ index
 - @body_id = "index"
-- if session[:email].nil?
-  %h2 Login
-  %form{:method => "post", :action => "/login"}
-    %label{:for => "email"} Email
-    %input{:type => "text", :id => "email", :name => "email", :class => "text", :value => ""}
-    %input{:type => "submit", :value => "Login"}
-- else
-  %h2 Create your application now
-  = session[:email]
-  %form{:method => "post", :action => "/applications"}
-    %label{:for => "name"} Application name
-    %input{:type => "text", :id => "name", :name => "name", :class => "text", :value => ""}
-    %input{:type => "submit", :value => "Save"}
+#mainbar
+  - if session[:email].nil?
+    %h2 Login
+    %form{:method => "post", :action => "/login"}
+      %label{:for => "email"} Email
+      %input{:type => "text", :id => "email", :name => "email", :class => "text", :value => ""}
+      %input{:type => "submit", :value => "Login"}
+  - else
+    %h2 Create your application now
+    = session[:email]
+    %form{:method => "post", :action => "/applications"}
+      %label{:for => "name"} Application name
+      %input{:type => "text", :id => "name", :name => "name", :class => "text", :value => ""}
+      %input{:type => "submit", :value => "Save"}
 
-  %h3 Your apps
-  %ul
-    - for application in applications
-      %li= application_link(application)
+    %h3 Your apps
+    %ul
+      - for application in applications
+        %li= application_link(application)
 
-.sidebar
+#sidebar
   %h3 What is this?
-  1 file apps is a microapp that helps developers try out the <a href="http://sinatra.rubyforge.org/">Sinatra</a> Ruby web framework. It provides a place for developers to start their first Sinatra application in a few seconds.
+  %p
+    1 file apps is a microapp that helps developers try out the <a href="http://sinatra.rubyforge.org/">Sinatra</a> Ruby web framework. It provides a place for developers to start their first Sinatra application in a few seconds.
   %h3 Resources
-  There are a few resources to help you learn coding your application with Sinatra. I recommend you read both the Sinatra web site, and some other people's code on <a href="github.com">github</a>.
+  %p
+    There are a few resources to help you learn coding your application with Sinatra. I recommend you read both the Sinatra web site, and some other people's code on <a href="github.com">github</a>.
   %ul
     %li <a href="http://sinatra.rubyforge.org/">Sinatra</a> web site has some pretty good documentation
     %li <a href="http://github.com/kastner/sin/tree/master/sinatra-blog.rb">Sin</a>, by Erik Kastner
