@@ -270,6 +270,7 @@ __END__
     %li <a href="http://github.com/kastner/sin/tree/master/sinatra-blog.rb">Sin</a>, by Erik Kastner
     %li <a href="http://devver.net/blog/2008/11/building-a-iphone-web-app-in-under-50-lines-with-sinatra-and-iui/">Building a iPhone web app in under 50 lines with Sinatra and iUI</a>
     %li <a href="http://github.com/adamwiggins/scanty/tree/master">Scanty</a>, by <a href="http://adam.blog.heroku.com/">Adam Wiggins</a>
+    %li <a href="http://www.vimeo.com/2374819">Web app in under 10 minutes</a>
 
 @@ show
 - @body_id = "show"
